@@ -1,29 +1,34 @@
-#ifdef unix
+#if !defined(_WIN32) && (defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)))
+	/* UNIX-style OS. ------------------------------------------- */
   #include <unistd.h>
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
 #endif
 
-#ifdef _WIN32
+#if defined(_WIN64) || defined(_WIN32)
+	/* Microsoft Windows. ------------------------------ */
   #include <windows.h>
   #include <stdio.h>
-  #include <tchar.h>
+  #include <string.h>
 #endif
 
 int input;
 char codeInput[101], extrovertCode[101];
 
 void clearScreen(){
-    #ifdef _WIN32
-      system("cls");
-    #endif
-    #ifdef unix
-      system("clear");
-    #endif
+  #if !defined(_WIN32) && (defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)))
+    /* Unix OS*/
+    system("clear");
+  #endif
+
+  #if defined(_WIN64) || defined(_WIN32)
+  	/* Microsoft Windows*/
+    system("cls");
+  #endif
 }
 
-void main(){
+void init(){
   clearScreen();
   printf("                    d8888b.  .d8b.  .d8888. db   dD  .d88b.  .88b  d88.                         \n\
                     88  `8D d8' `8b 88'  YP 88 ,8P' .8P  Y8. 88'YbdP`88                         \n\
@@ -38,26 +43,33 @@ d8888b. d88888b  .o88b. d8888b. db    db d888888b d888888b .88b  d88. d88888b d8
 88`8b   88~~~~~ 8b      88`8b   88    88    88       88    88  88  88 88~~~~~ 88 V8o88    88    \n\
 88 `88. 88.     Y8b  d8 88 `88. 88b  d88   .88.      88    88  88  88 88.     88  V888    88    \n\
 88   YD Y88888P  `Y88P' 88   YD ~Y8888P' Y888888P    YP    YP  YP  YP Y88888P VP   V8P    YP    \n");
+}
 
-  printf("Choose menu: \n");
+void main(){
+  init();
+
+  printf("\nChoose menu: \n");
   printf("1. getTheCode()\n");
   printf("2. getTheStatus()\n");
   printf("Your input : ");
-  scanf("%d", &input);
+  scanf("%d", &input); getchar();
   switch (input) {
     case 1:
       //GENERATE CAAS CODE
       MENU2:
-        printf("Choose menu: \n");
+        init();
+
+        printf("\nChoose menu: \n");
         printf("1. Introvert Way (get the first code by doing some programming stuff)\n");
         printf("2. Extrovert Way (get the second code by socializing with the other)\n");
         printf("3. Back to main menu\n");
         printf("Your input : ");
-        scanf("%d", &input);
+        scanf("%d", &input); getchar();
+        init();
         switch (input) {
           case 1:
             //INTROVERT WAY
-            printf("Edit the \"main.c\" in the folder you've downloaded\n");
+            printf("\nEdit the \"main.c\" in the folder you've downloaded\n");
             printf("And start to code by following these steps of algorithm below :\n");
             printf("1. Open userAll.dat\n");
             printf("2. Find the NIM that you want to get the CODE\n");
@@ -78,7 +90,7 @@ d8888b. d88888b  .o88b. d8888b. db    db d888888b d888888b .88b  d88. d88888b d8
 
           case 2:
             //EXTROVERT WAY
-            printf("1. Birthdate of the only woman in TUCIL Group K (only date without month and year)\n");
+            printf("\n1. Birthdate of the only woman in TUCIL Group K (only date without month and year)\n");
             printf("2. Tahap terakhir yang telah diikuti (gunakan angka)\n");
             printf("3. Jumlah persyaratan berkas tahap awal\n");
             printf("4. Prodi terbanyak yang mengikuti rekruitasi (TT/TE/TF)\n");
