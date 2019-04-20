@@ -89,6 +89,11 @@ d8888b. d88888b  .o88b. d8888b. db    db d888888b d888888b .88b  d88. d88888b d8
             printf("(EX: 22-1-3-TF-1-1-54)\n");
             printf("Your input : ");
             fgets(extrovertCode, 100, stdin);
+            if(strcmp(extrovertCode, "")==0){
+              printf("Here is the second code => \"test\"\n");
+            } else {
+              printf("Wrong code !!!");
+            }
             getchar();
             goto MENU2;
 
@@ -110,6 +115,8 @@ d8888b. d88888b  .o88b. d8888b. db    db d888888b d888888b .88b  d88. d88888b d8
       printf("(first code from introvert way + second code from extrovert way)\n");
       printf("Use \"+\" as the seperator (EX: d4sk0m+r3cru1tm3nt) => \n");
       fgets(codeInput, 100, stdin);
+
+      //CODE MATCHING FOR EACH CAAS
       break;
 
     default:
