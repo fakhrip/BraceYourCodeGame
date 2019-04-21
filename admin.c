@@ -193,8 +193,13 @@ void main() {
           userKey[i].key = userAll[i].key;
           printf("| Masukkan PASS : ");
           fgets(userCode[i].pass, 100, stdin);
-          printf("| Lulus ? (1/0) : ");
-          scanf("%d", status[i].isPassed);
+
+          ASKLULUS:
+            printf("| Lulus ? (1/0) : ");
+            scanf("%d", status[i].isPassed);
+            if(status[i].isPassed!=0 && status[i].isPassed!=1)
+              goto ASKLULUS;
+
           printf("-----------------\n");
           strcpy(userKey[i].pass, encrypt(userCode[i].pass, userKey[i].key));
           userCode[i].code = xorencrypt(userAll[i].nim, "braceyourcode");
