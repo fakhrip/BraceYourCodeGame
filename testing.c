@@ -51,13 +51,18 @@ char * xorencrypt(char * message, char * key) {
 }
 
 int main(int argc, char * argv[]) {
-    char * message = "1101184040";
+    char * message = "1101184340";
     char * key = "braceyourcode";
 
     char * encrypted = xorencrypt(message, key);
     printf("%s\n", xorencrypt(message, key));
     printf("%d\n", strcmp("SCQRTA[EFS", xorencrypt(message, key)));
     free(encrypted);
+
+    // for (size_t i = 0; i < 50; i++) {
+    //   /* code */
+    //   printf("%d\n",i+1 );
+    // }
 
     return 0;
 }

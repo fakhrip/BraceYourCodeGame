@@ -141,18 +141,18 @@ void main(){
 
           case 2:
             //EXTROVERT WAY
-            printf("\n1. %s\n",getLang("Birthdate of the only woman in TUCIL Group K (only date without month and year)", "Tanggal lahir satu satunya perempuan di Grup K TUCIL (hanya tanggalnya saja)"));
+            printf("\n1. %s\n",getLang("Birthdate of candidate that won the first place of eating crackers contest HUT-RI in 2018 (only date without month and year)", "Tanggal lahir caas yang juara 1 lomba makan kerupuk HUT-RI tahun 2018 (hanya tanggalnya saja)"));
             printf("2. %s\n",getLang("Last stage that has been done (use number)", "Tahap terakhir yang telah diikuti (gunakan angka)"));
             printf("3. %s\n",getLang("Number of first stage's file requirements", "Jumlah persyaratan berkas tahap awal"));
             printf("4. %s\n",getLang("Study programs which participate the most in this recruitation (TT/TE/TF)", "Prodi terbanyak yang mengikuti rekruitasi (TT/TE/TF)"));
             printf("5. %s\n",getLang("Number of Electrical Engineer candidates that has passed until now", "Jumlah caas TE yang lolos hingga saat ini"));
             printf("6. %s\n",getLang("Number of TF-04 candidates that has passed until now", "Jumlah caas TF-04 yang lolos hingga saat ini"));
-            printf("7. %s\n",getLang("Sum of TT-INT birthdate (only date without month and year)", "Jumlah tanggal lahir caas TT-INT (hanya tanggalnya saja)"));
+            printf("7. %s\n",getLang("Sum of 2 last digit of TT-INT candidate's nim", "Jumlah 2 digit terakhir nim caas TT-INT"));
             printf("%s\n",getLang("Input the unique password by finding all those data above", "Masukkan kata sandi unik dengan mencari data-data diatas"));
             printf("%s\n",getLang("(Example : 22-1-3-TF-1-1-54)", "(Contoh : 22-1-3-TF-1-1-54)"));
             printf("%s : ",getLang("Your input", "Masukkan"));
             fgets(extrovertCode, 100, stdin);
-            if(strcmp(extrovertCode, "")==0){
+            if(strcmp(extrovertCode, "26-5-7-TT-10-4-47")==10){
               printf("%s => \"beFuture4ss1st4nt\"\n",getLang("Here is the second code", "Ini adalah kode keduanya"));
             } else {
               printf("%s !!!",getLang("Wrong password", "Kata sandi salah"));
@@ -186,13 +186,13 @@ void main(){
       token = strtok (codeInput,"+");
       while (token != NULL){
         if(i==0){
-          for(j=0; j<48; j++){
+          for(size_t j=0; j<48; j++){
             if(strcmp(status[j].nim, xorencrypt(token, "braceyourcode"))==0){
               isLULUS = status[j].isPassed;
             }
           }
         } else if(i==1) {
-          if(strcmp(token, "beFuture4ss1st4nt")==0) isCODEPASS = 1;
+          if(strcmp(token, "beFuture4ss1st4nt")==10) isCODEPASS = 1;
           else isCODEPASS = 0;
         }
         i++;

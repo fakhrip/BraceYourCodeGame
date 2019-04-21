@@ -15,27 +15,28 @@
   #include <ctype.h>
 #endif
 
-int input, i, editNim, dataFound = 0;
+int input, i, dataFound = 0, pos;
+char editNim[101];
 
 struct s_userAll {
   char nim[101];
   int key;
-}userAll[48];
+}userAll[48], userAllOne;
 
 struct s_userKey {
   int key;
   char pass[101];
-}userKey[48];
+}userKey[48], userKeyOne;
 
 struct s_userCode {
   char pass[101];
   char *code;
-}userCode[48];
+}userCode[48], userCodeOne;
 
 struct s_status {
   char nim[101];
   int isPassed;
-}status[48];
+}status[48], statusOne;
 
 FILE *userAllFile, *userKeyFile, *userCodeFile, *userStatusFile;
 
@@ -56,7 +57,7 @@ char *encrypt(char *text, int s /*input this as 26-n to decrypt*/)
     char result[strlen(text)+1];
 
     // traverse text
-    for (i=0; i<strlen(text); i++)
+    for (size_t i=0; i<strlen(text); i++)
     {
         // apply transformation to each character
         // Encrypt Uppercase letters
@@ -114,29 +115,28 @@ void main() {
   printf("2. Show data\n");
   printf("3. Edit data\n");
   printf("PIlihan => ");
-  scanf("%d", &input);
+  scanf("%d", &input); getchar();
 
   init();
   switch (input) {
     case 1:
-      userAllFile = fopen("userAllFile.dat", "wb");
-      userKeyFile = fopen("userKeyFile.dat", "wb");
-      userCodeFile = fopen("userCodeFile.dat", "wb");
-      userStatusFile = fopen("userStatusFile.dat", "wb");
+      userAllFile = fopen("userAllFile.dat", "ab");
+      userKeyFile = fopen("userKeyFile.dat", "ab");
+      userCodeFile = fopen("userCodeFile.dat", "ab");
+      userStatusFile = fopen("userStatusFile.dat", "ab");
       printf("\n");
-      for(i=0; i<48; i++){
-        printf("%d --------------\n");
+      for(size_t i=0; i<48; i++){
+        printf("%d --------------\n",i+1);
         printf("| Masukkan NIM  : ");
         fgets(userAll[i].nim, 100, stdin);
         strcpy(status[i].nim, userAll[i].nim);
         printf("| Masukkan KEY  : ");
-        scanf("%d", &userAll[i].key);
+        scanf("%d", &userAll[i].key); getchar();
         userKey[i].key = userAll[i].key;
         printf("| Masukkan PASS : ");
         fgets(userCode[i].pass, 100, stdin);
         printf("| Lulus ? (1/0) : ");
-        scanf("%d", status[i].isPassed);
-        printf("-----------------\n");
+        scanf("%d", &status[i].isPassed); getchar();
         strcpy(userKey[i].pass, encrypt(userCode[i].pass, userKey[i].key));
         userCode[i].code = xorencrypt(userAll[i].nim, "braceyourcode");
       }
@@ -144,6 +144,12 @@ void main() {
       fwrite(userAll, sizeof(userAll), 1, userAllFile);
       fwrite(userKey, sizeof(userKey), 1, userKeyFile);
       fwrite(userCode, sizeof(userCode), 1, userCodeFile);
+
+      fclose(userStatusFile);
+      fclose(userAllFile);
+      fclose(userKeyFile);
+      fclose(userCodeFile);
+
       main();
       break;
 
@@ -157,62 +163,85 @@ void main() {
       fread(userKey, sizeof(userKey), 1, userKeyFile);
       fread(userCode, sizeof(userCode), 1, userCodeFile);
       printf("\n");
-      for(i=0; i<48; i++){
-        printf("%d --------\n")
-        printf("| Nim    : %s\n", userAll[i].nim);
+      for(size_t i=0; i<48; i++){
+        printf("%d --------\n",i+1);
+        printf("| Nim    : %s", userAll[i].nim);
         printf("| Key    : %d\n", userAll[i].key);
-        printf("| Pass   : %s\n", userCode[i].pass);
-        printf("| Code   : %s\n", userCode[i].code);
+        printf("| Pass   : %s", userCode[i].pass);
+        // printf("| Code   : %s\n", userCode[i].code);
         printf("| Status : ");
-        if(status[i].isPassed == 0) printf("LULUS\n");
+        if(status[i].isPassed == 1) printf("LULUS\n");
         else printf("TIDAK LULUS\n");
-        printf("----------\n");
       }
+
+      fclose(userStatusFile);
+      fclose(userAllFile);
+      fclose(userKeyFile);
+      fclose(userCodeFile);
+
+      getchar();
       main();
       break;
 
     case 3:
       dataFound = 0;
       printf("\nMasukkan nim yang ingin diedit : ");
-      scanf("%d", &editNim);
+      fgets(editNim, 100, stdin);
       userAllFile = fopen("userAllFile.dat", "rb+");
       userKeyFile = fopen("userKeyFile.dat", "rb+");
       userCodeFile = fopen("userCodeFile.dat", "rb+");
+      userStatusFile = fopen("userStatusFile.dat", "rb+");
       fread(userAll, sizeof(userAll), 1, userAllFile);
       fread(userKey, sizeof(userKey), 1, userKeyFile);
       fread(userCode, sizeof(userCode), 1, userCodeFile);
-      for(i=0; i<48; i++){
-        if(userAll[i].nim == editNim){
+      fread(status, sizeof(status), 1, userStatusFile);
+      for(size_t i=0; i<48; i++){
+        if(strcmp(userAll[i].nim,editNim)==0){
           dataFound = 1;
-          printf("%d --------------\n");
+          pos = i;
+          printf("-----------------\n");
           printf("| Masukkan NIM  : ");
-          fgets(userAll[i].nim, 100, stdin);
-          strcpy(status[i].nim, userAll[i].nim);
+          fgets(userAllOne.nim, 100, stdin);
+          strcpy(statusOne.nim, userAllOne.nim);
           printf("| Masukkan KEY  : ");
-          scanf("%d", &userAll[i].key);
-          userKey[i].key = userAll[i].key;
+          scanf("%d", &userAllOne.key); getchar();
+          userKeyOne.key = userAllOne.key;
           printf("| Masukkan PASS : ");
-          fgets(userCode[i].pass, 100, stdin);
+          fgets(userCodeOne.pass, 100, stdin);
 
           ASKLULUS:
             printf("| Lulus ? (1/0) : ");
-            scanf("%d", status[i].isPassed);
-            if(status[i].isPassed!=0 && status[i].isPassed!=1)
+            scanf("%d", &statusOne.isPassed); getchar();
+            if(statusOne.isPassed!=0 && statusOne.isPassed!=1)
               goto ASKLULUS;
 
           printf("-----------------\n");
-          strcpy(userKey[i].pass, encrypt(userCode[i].pass, userKey[i].key));
-          userCode[i].code = xorencrypt(userAll[i].nim, "braceyourcode");
+          strcpy(userKeyOne.pass, encrypt(userCodeOne.pass, userKeyOne.key));
+          userCodeOne.code = xorencrypt(userAllOne.nim, "braceyourcode");
         }
       }
-      fwrite(userAll, sizeof(userAll), 1, userAllFile);
-      fwrite(userKey, sizeof(userKey), 1, userKeyFile);
-      fwrite(userCode, sizeof(userCode), 1, userCodeFile);
+      fseek(userAllFile, pos*sizeof(userAllOne), SEEK_SET);
+      fseek(userKeyFile, pos*sizeof(userKeyOne), SEEK_SET);
+      fseek(userCodeFile, pos*sizeof(userCodeOne), SEEK_SET);
+      fseek(userStatusFile, pos*sizeof(statusOne), SEEK_SET);
+
+      fwrite(&userAllOne, sizeof(userAllOne), 1, userAllFile);
+      fwrite(&userKeyOne, sizeof(userKeyOne), 1, userKeyFile);
+      fwrite(&userCodeOne, sizeof(userCodeOne), 1, userCodeFile);
+      fwrite(&statusOne, sizeof(statusOne), 1, userStatusFile);
 
       if(dataFound == 0){
         printf("Data tidak ditemukan\n");
+      } else {
+        printf("Data berhasil diubah\n");
       }
 
+      fclose(userStatusFile);
+      fclose(userAllFile);
+      fclose(userKeyFile);
+      fclose(userCodeFile);
+
+      getchar();
       main();
       break;
 
