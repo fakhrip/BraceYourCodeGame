@@ -4,6 +4,7 @@
   #include <stdlib.h>
   #include <stdio.h>
   #include <string.h>
+  #include <ctype.h>
 #endif
 
 #if defined(_WIN64) || defined(_WIN32)
@@ -11,10 +12,27 @@
   #include <windows.h>
   #include <stdio.h>
   #include <string.h>
+  #include <ctype.h>
 #endif
 
-int input;
-char codeInput[101], extrovertCode[101];
+int input, i, editNim, dataFound = 0;
+
+struct s_userAll {
+  int nim;
+  int key;
+}userAll[48];
+
+struct s_userKey {
+  int key;
+  char pass[101];
+}userKey[48];
+
+struct s_userCode{
+  char pass[101];
+  char code[101];
+}userCode[48];
+
+FILE *userAllFile, *userKeyFile, *userCodeFile;
 
 void clearScreen(){
   #if !defined(_WIN32) && (defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)))
@@ -26,6 +44,29 @@ void clearScreen(){
   	/* Microsoft Windows*/
     system("cls");
   #endif
+}
+
+char *encrypt(char *text, int s /*input this as 26-n to decrypt*/)
+{
+    char result[strlen(text)+1];
+
+    // traverse text
+    for (i=0; i<strlen(text); i++)
+    {
+        // apply transformation to each character
+        // Encrypt Uppercase letters
+        if (isupper(text[i]))
+            result[i] = (text[i]+s-65)%26 +65;
+        // Encrypt Lowercase letters
+        else
+            result[i] = (text[i]+s-97)%26 +97;
+    }
+
+    // Return the resulting string
+    char *forreturn;
+    forreturn = malloc (sizeof (char) * strlen(text)+1);
+    strcpy(forreturn, result);
+    return forreturn;
 }
 
 void init(){
@@ -47,4 +88,97 @@ d8888b. d88888b  .o88b. d8888b. db    db d888888b d888888b .88b  d88. d88888b d8
 
 void main() {
   init();
+
+  printf("\nMenu :\n");
+  printf("1. Input data\n");
+  printf("2. Show data\n");
+  printf("3. Edit data\n");
+  printf("PIlihan => ");
+  scanf("%d", &input);
+
+  init();
+  switch (input) {
+    case 1:
+      userAllFile = fopen("userAllFile.dat", "wb");
+      userKeyFile = fopen("userKeyFile.dat", "wb");
+      userCodeFile = fopen("userCodeFile.dat", "wb");
+      printf("\n");
+      for(i=0; i<48; i++){
+        printf("%d --------------\n");
+        printf("| Masukkan NIM  : ");
+        scanf("%d", &userAll[i].nim);
+        printf("| Masukkan KEY  : ");
+        scanf("%d", &userAll[i].key);
+        userKey[i].key = userAll[i].key;
+        printf("| Masukkan PASS : ");
+        fgets(userCode[i].pass, 100, stdin);
+        printf("-----------------\n");
+        strcpy(userKey[i].pass, encrypt(userCode[i].pass, userKey[i].key));
+        strcpy(userCode[i].code, "");
+      }
+      fwrite(userAll, sizeof(userAll), 1, userAllFile);
+      fwrite(userKey, sizeof(userKey), 1, userKeyFile);
+      fwrite(userCode, sizeof(userCode), 1, userCodeFile);
+      main();
+      break;
+
+    case 2:
+      userAllFile = fopen("userAllFile.dat", "rb");
+      userKeyFile = fopen("userKeyFile.dat", "rb");
+      userCodeFile = fopen("userCodeFile.dat", "rb");
+      fread(userAll, sizeof(userAll), 1, userAllFile);
+      fread(userKey, sizeof(userKey), 1, userKeyFile);
+      fread(userCode, sizeof(userCode), 1, userCodeFile);
+      printf("\n");
+      for(i=0; i<48; i++){
+        printf("%d -----\n")
+        printf("| Nim  : %s\n", userAll[i].nim);
+        printf("| Key  : %d\n", userAll[i].key);
+        printf("| Pass : %s\n", userCode[i].pass);
+        printf("| Code : %s\n", userCode[i].code);
+        printf("--------\n");
+      }
+      main();
+      break;
+
+    case 3:
+      dataFound = 0;
+      printf("\nMasukkan nim yang ingin diedit : ");
+      scanf("%d", &editNim);
+      userAllFile = fopen("userAllFile.dat", "rb+");
+      userKeyFile = fopen("userKeyFile.dat", "rb+");
+      userCodeFile = fopen("userCodeFile.dat", "rb+");
+      fread(userAll, sizeof(userAll), 1, userAllFile);
+      fread(userKey, sizeof(userKey), 1, userKeyFile);
+      fread(userCode, sizeof(userCode), 1, userCodeFile);
+      for(i=0; i<48; i++){
+        if(userAll[i].nim == editNim){
+          dataFound = 1;
+          printf("-----------------\n");
+          printf("| Masukkan NIM  : ");
+          scanf("%d", &userAll[i].nim);
+          printf("| Masukkan KEY  : ");
+          scanf("%d", &userAll[i].key);
+          userKey[i].key = userAll[i].key;
+          printf("| Masukkan PASS : ");
+          fgets(userCode[i].pass, 100, stdin);
+          printf("-----------------\n");
+          strcpy(userKey[i].pass, encrypt(userCode[i].pass, userKey[i].key));
+          strcpy(userCode[i].code, "");
+        }
+      }
+      fwrite(userAll, sizeof(userAll), 1, userAllFile);
+      fwrite(userKey, sizeof(userKey), 1, userKeyFile);
+      fwrite(userCode, sizeof(userCode), 1, userCodeFile);
+
+      if(dataFound == 0){
+        printf("Data tidak ditemukan\n");
+      }
+
+      main();
+      break;
+
+    default:
+      main();
+  }
 }

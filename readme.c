@@ -16,7 +16,7 @@
 #endif
 
 int input;
-bool isEnglish = false;
+bool isEnglish = false, languageChosen = false;
 char codeInput[101], extrovertCode[101];
 
 void clearScreen(){
@@ -31,11 +31,11 @@ void clearScreen(){
   #endif
 }
 
-char *getLang(char *stringEN, char *stringID){
+const char *getLang(char *stringEN, char *stringID){
   if(isEnglish){
-    printf("%s", stringEN);
+    return stringEN;
   } else {
-    printf("%s", stringID);
+    return stringID;
   }
 }
 
@@ -57,17 +57,19 @@ d8888b. d88888b  .o88b. d8888b. db    db d888888b d888888b .88b  d88. d88888b d8
 }
 
 void main(){
-  init();
+  if(!languageChosen){
+    init();
 
-  printf("\n%s :\n",getLang("Choose language", "Pilih bahasa"));
-  printf("1. Indonesia\n");
-  printf("2. English\n");
-  printf("%s : ",getLang("Your input", "Masukkan"));
-  scanf("%d", &input); getchar();
-  switch (input) {
-    case 1: isEnglish = false; break;
-    case 2: isEnglish = true; break;
-    default: printf("%s\n",getLang("Wrong input", "Inputan salah")); getchar(); main();
+    printf("\n%s :\n",getLang("Choose language", "Pilih bahasa"));
+    printf("1. Indonesia\n");
+    printf("2. English\n");
+    printf("%s : ",getLang("Your input", "Masukkan"));
+    scanf("%d", &input); getchar();
+    switch (input) {
+      case 1: isEnglish = false; languageChosen = true; break;
+      case 2: isEnglish = true; languageChosen = true; break;
+      default: printf("%s\n",getLang("Wrong input", "Inputan salah")); getchar(); main();
+    }
   }
 
   init();
@@ -83,8 +85,8 @@ void main(){
         init();
 
         printf("\n%s :\n",getLang("Choose menu", "Pilihan menu"));
-        printf("1. %s\n",getLang("Introvert Way (get the first code by doing some programming stuff)", ""));
-        printf("2. %s\n",getLang("Extrovert Way (get the second code by socializing with the other)", ""));
+        printf("1. %s\n",getLang("Introvert Way (get the first code by doing some programming stuff)", "Cara Introvert (dapatkan kode pertamanya dengan melakukan hal hal programming)"));
+        printf("2. %s\n",getLang("Extrovert Way (get the second code by socializing with the other)", "Cara Extrovert (dapatkan kode keduanya dengan bersosialisasi dengan yang lainnya)"));
         printf("3. %s\n",getLang("Back to main menu", "Kembali ke menu utama"));
         printf("%s : ",getLang("Your input", "Masukkan"));
         scanf("%d", &input); getchar();
@@ -150,10 +152,11 @@ void main(){
       printf("%s\n",getLang("|---------------------------------------------------|", "|-----------------------------------------------------------------------|"));
       printf("%s\n",getLang("Please Input The CODE", "Mohon masukkan KODE nya"));
       printf("%s\n",getLang("(first code from introvert way + second code from extrovert way)", "(kode pertama dari cara introvert + kode kedua dari cara extrovert)"));
-      printf("%s (EX: d4sk0m+r3cru1tm3nt) => \n",getLang("Use \"+\" as the seperator", "Gunakan \"+\" sebagai pemisahnya"));
+      printf("%s (EX: d4sk0m+r3cru1tm3nt) => ",getLang("Use \"+\" as the seperator", "Gunakan \"+\" sebagai pemisahnya"));
       fgets(codeInput, 100, stdin);
 
       //CODE MATCHING FOR EACH CAAS
+
       break;
 
     default:
