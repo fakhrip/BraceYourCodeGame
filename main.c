@@ -31,7 +31,7 @@
 /**/}
 /**/
 /**/struct s_userAll {
-/**/  int nim;
+/**/  char nim[101];
 /**/  int key;
 /**/}userAll[48];
 /**/
@@ -40,9 +40,9 @@
 /**/  char pass[101];
 /**/}userKey[48];
 /**/
-/**/struct s_userCode{
+/**/struct s_userCode {
 /**/  char pass[101];
-/**/  char code[101];
+/**/  char *code;
 /**/}userCode[48];
 /**/
 /**/FILE *userAllFile, *userKeyFile, *userCodeFile;

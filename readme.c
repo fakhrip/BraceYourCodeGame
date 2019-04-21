@@ -15,9 +15,17 @@
   #include <stdbool.h>
 #endif
 
-int input;
+int input, i, j, isLULUS, isCODEPASS;
 bool isEnglish = false, languageChosen = false;
 char codeInput[101], extrovertCode[101];
+char *token;
+
+struct s_status {
+  char nim[101];
+  int isPassed;
+}status[48];
+
+FILE *userStatusFile;
 
 void clearScreen(){
   #if !defined(_WIN32) && (defined(__unix__) || defined(__unix) || (defined(__APPLE__) && defined(__MACH__)))
@@ -37,6 +45,21 @@ const char *getLang(char *stringEN, char *stringID){
   } else {
     return stringID;
   }
+}
+
+char *xorencrypt(char * message, char * key) {
+    size_t messagelen = strlen(message);
+    size_t keylen = strlen(key);
+
+    char * encrypted = malloc(messagelen+1);
+
+    int i;
+    for(i = 0; i < messagelen; i++) {
+        encrypted[i] = message[i] ^ key[i % keylen];
+    }
+    encrypted[messagelen] = '\0';
+
+    return encrypted;
 }
 
 void init(){
@@ -130,7 +153,7 @@ void main(){
             printf("%s : ",getLang("Your input", "Masukkan"));
             fgets(extrovertCode, 100, stdin);
             if(strcmp(extrovertCode, "")==0){
-              printf("%s => \"test\"\n",getLang("Here is the second code", "Ini adalah kode keduanya"));
+              printf("%s => \"beFuture4ss1st4nt\"\n",getLang("Here is the second code", "Ini adalah kode keduanya"));
             } else {
               printf("%s !!!",getLang("Wrong password", "Kata sandi salah"));
             }
@@ -156,7 +179,42 @@ void main(){
       fgets(codeInput, 100, stdin);
 
       //CODE MATCHING FOR EACH CAAS
+      userStatusFile = fopen("userStatusFile.dat", "rb");
+      fread(status, sizeof(status), 1, userStatusFile);
 
+      i=0;
+      token = strtok (codeInput,"+");
+      while (token != NULL){
+        if(i==0){
+          for(j=0; j<48; j++){
+            if(strcmp(status[j].nim, xorencrypt(token, "braceyourcode"))==0){
+              isLULUS = status[j].isPassed;
+            }
+          }
+        } else if(i==1) {
+          if(strcmp(token, "beFuture4ss1st4nt")==0) isCODEPASS = 1;
+          else isCODEPASS = 0;
+        }
+        i++;
+        token = strtok (NULL, "+");
+      }
+
+      if(isCODEPASS == 1){
+        //CODERIGHT
+        if(isLULUS == 1){
+          //LULUS
+          printf("%s",getLang("CONGRATULATIONS YOU PASS TO THE NEXT STAGE", "SELAMAT KAMU LULUS KE TAHAP SELANJUTNYA"));
+        } else {
+          //TIDAK LULUS
+          printf("%s",getLang("SORRY YOU FAILED TO PASS TO THE NEXT STAGE", "MAAF KAMU TIDAK LULUS KE TAHAP SELANJUTNYA"));
+        }
+      } else {
+        //WRONGCODE
+        printf("%s",getLang("CODE is wrong", "KODE nya salah"));
+      }
+
+      getchar();
+      main();
       break;
 
     default:
