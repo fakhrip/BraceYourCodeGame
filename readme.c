@@ -120,17 +120,18 @@ void main(){
             printf("\n%s\n",getLang("Edit the \"main.c\" in the folder you've downloaded", "Edit \"main.c\" yang ada didalam folder yang telah kamu download"));
             printf("%s :\n",getLang("And start to code by following these steps of algorithm below", "Dan mulailah membuat programnya dengan mengikuti langkah-langkah algoritma berikut"));
             printf("1. %s\n",getLang("Open userAllFile.dat (fopen)", "Buka userAllFile.dat (fopen)"));
-            printf("2. %s\n",getLang("Find the NIM that you want to get the CODE (fread)", "Carilah NIM yang ingin dicari untuk mendapatkan CODE nya (fread)"));
+            printf("2. %s\n",getLang("Find the NIM that you want to get the CODE (fread) (strcmp)", "Carilah NIM yang ingin dicari untuk mendapatkan CODE nya (fread) (strcmp)"));
             printf("3. %s\n",getLang("Get the KEY from the struct data", "Dapatkan KEY dari data structnya"));
             printf("4. %s\n",getLang("Use the KEY in the userKey.dat to get PASS", "Gunakan KEY dari userKeyFile.dat untuk mendapatkan PASS nya"));
             printf("   - %s\n",getLang("Open userKeyFile.dat", "Buka userKeyFile.dat"));
-            printf("   - %s\n",getLang("Find the KEY matching with KEY from userAllFile.dat", "Carilah KEY yang sama dengan KEY dari userAllFile.dat"));
+            printf("   - %s\n",getLang("Find the KEY matching with KEY from userAllFile.dat (fread) (strcmp)", "Carilah KEY yang sama dengan KEY dari userAllFile.dat (fread) (strcmp)"));
             printf("   - %s\n",getLang("Get the PASS from the struct data", "Dapatkan PASS dari data structnya"));
-            printf("5. %s\n",getLang("Decrypt the PASS using caesar cipher encryption algorithm (encrypt function in \"main.c\")", "Dekripsi PASS nya dengan menggunakan algoritma enkripsi caesar cipher (fungsi encrypt pada \"main.c\")"));
+            printf("5. %s\n",getLang("Decrypt the PASS using caesar cipher encryption algorithm (encrypt() function in \"main.c\")", "Dekripsi PASS nya dengan menggunakan algoritma enkripsi caesar cipher (fungsi encrypt() pada \"main.c\")"));
             printf("   %s\n",getLang("and use the KEY as the algorithm parameter", "dan gunakan KEY nya sebagai parameter dari algoritma enkripsi tersebut"));
             printf("6. %s\n",getLang("Use the decrypted PASS in the userCodeFile.dat to get the CODE", "Gunakan PASS yang sudah didekripsi kedalam userCodeFile.dat untuk mendapatkan CODE nya"));
             printf("   - %s\n",getLang("Open userCodeFile.dat", "Buka userCodeFile.dat"));
-            printf("   - %s\n",getLang("Find the PASS matching with the decrypted PASS from userKeyFile.dat", "Carilah PASS yang sama dengan PASS yang sudah didekripsi dari userKeyFile.dat"));
+            printf("   - %s\n",getLang("Find the PASS matching with the decrypted PASS from userKeyFile.dat (fread) (strstr)", "Carilah PASS yang sama dengan PASS yang sudah didekripsi dari userKeyFile.dat (fread) (strstr)"));
+            printf("     %s\n",getLang("compare decrypted userKey.pass with the userCode.pass using strstr()", "Bandingkan userKey.pass yang sudah didekripsi dengan userCode.pass dengan menggunakan strstr()"));
             printf("   - %s\n",getLang("Get the CODE from the struct data", "Dapatkan CODE dari data structnya"));
             printf("%s\n",getLang("Run the \"main.c\" and get the CODE from the nim you will input there", "Jalankan \"main.c\" nya dan dapatkan CODE sesuai dengan nim yang kamu input disana"));
             printf("\n(*)%s\n",getLang("Important point is that you can solve this program whatever you want", "Poin pentingnya adalah bahwa kamu bisa menyelesaikan program ini sesuai keinginanmu"));
@@ -187,7 +188,7 @@ void main(){
       while (token != NULL){
         if(i==0){
           isAVAILABLE = 0;
-          for(size_t j=0; j<48; j++){
+          for(j=0; j<48; j++){
             if(strcmp(status[j].nim, xorencrypt(token, "braceyourcode"))==0){
               isLULUS = status[j].isPassed;
               isAVAILABLE = 1;
@@ -206,10 +207,10 @@ void main(){
         if (isAVAILABLE == 1) {
           if(isLULUS == 1){
             //LULUS
-            printf("%s",getLang("CONGRATULATIONS YOU PASS TO THE NEXT STAGE", "SELAMAT KAMU LULUS KE TAHAP SELANJUTNYA"));
+            printf("%s",getLang("CONGRATULATIONS YOU PASS TO THE NEXT STAGE :D", "SELAMAT KAMU LULUS KE TAHAP SELANJUTNYA :D"));
           } else {
             //TIDAK LULUS
-            printf("%s",getLang("SORRY YOU FAILED TO PASS TO THE NEXT STAGE", "MAAF KAMU TIDAK LULUS KE TAHAP SELANJUTNYA"));
+            printf("%s",getLang("SORRY YOU FAILED TO PASS TO THE NEXT STAGE :( DONT BE SAD AND KEEP YOUR SPIRIT", "MAAF KAMU TIDAK LULUS KE TAHAP SELANJUTNYA :( JANGAN BERSEDIH DAN TETAP SEMANGAT"));
           }
         } else {
           printf("%s",getLang("DATA NOT FOUND (IT MAYBE WRONG)", "DATA TIDAK DITEMUKAN (KEMUNGKINAN INPUT SALAH)"));
