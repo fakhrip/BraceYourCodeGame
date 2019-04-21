@@ -32,7 +32,7 @@
 /**/  #endif
 /**/}
 /**/
-/**/ //REMEMBER TOTAL OF ALL CAAS IS 48 SO THERE ARE 48 DATA IN EACH FILE
+/**/ //REMEMBER TOTAL OF ALL CAAS IS 48, SO THERE ARE 48 DATA IN EACH FILE
 /**/struct s_userAll {
 /**/  char nim[101];
 /**/  int key;
@@ -50,12 +50,12 @@
 /**/
 /**/FILE *userAllFile, *userKeyFile, *userCodeFile;
 /**/
-/**/char *encrypt(char *pass, int key /*input this as 26-key to decrypt*/)
+/**/char *encrypt(char *pass, int key /*input this as 26-(key%26) to decrypt*/)
 /**/{
 /**/    char result[strlen(pass)];
 /**/
 /**/    // traverse pass
-/**/    for (size_t i=0; i<strlen(pass); i++)
+/**/    for (i=0; i<strlen(pass); i++)
 /**/    {
 /**/        // apply transformation to each character
 /**/        // Encrypt Uppercase letters
@@ -101,23 +101,7 @@ void main() {
   init();
 
   char nim[101];
-  printf("Masukkan nim: ");
+  printf("\nMasukkan nim: ");
   fgets(nim, 100, stdin);
   strtok(nim, "\n");
-  userAllFile = fopen("userAllFile.dat", "rb");
-  while(fread(&userAll, sizeof(userAll), 1, userAllFile)==1){
-    if(strcmp(userAll.nim, nim)==0){
-      userKeyFile = fopen("userKeyFile.dat", "rb");
-      while(fread(&userKey, sizeof(userKey), 1, userKeyFile)==1){
-        if(userAll.key == userKey.key){
-          userCodeFile = fopen("userCodeFile.dat", "rb");
-          while(fread(&userCode, sizeof(userCode), 1, userCodeFile)==1){
-            if(strstr(encrypt(userKey.pass, 26-userKey.key), userCode.pass)!=NULL){
-              printf("KODENYA => \"%s\"\n", userCode.code);
-            }
-          }
-        }
-      }
-    }
-  }
 }
