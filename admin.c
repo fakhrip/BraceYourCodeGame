@@ -30,7 +30,7 @@ struct s_userKey {
 
 struct s_userCode {
   char pass[101];
-  char *code;
+  char code[101];
 }userCode[48], userCodeOne;
 
 struct s_status {
@@ -129,16 +129,18 @@ void main() {
         printf("%d --------------\n",i+1);
         printf("| Masukkan NIM  : ");
         fgets(userAll[i].nim, 100, stdin);
+        strtok(userAll[i].nim, "\n");
         strcpy(status[i].nim, userAll[i].nim);
         printf("| Masukkan KEY  : ");
         scanf("%d", &userAll[i].key); getchar();
         userKey[i].key = userAll[i].key;
         printf("| Masukkan PASS : ");
         fgets(userCode[i].pass, 100, stdin);
+        strtok(userCode[i].pass, "\n");
         printf("| Lulus ? (1/0) : ");
         scanf("%d", &status[i].isPassed); getchar();
         strcpy(userKey[i].pass, encrypt(userCode[i].pass, userKey[i].key));
-        userCode[i].code = xorencrypt(userAll[i].nim, "braceyourcode");
+        strcpy(userCode[i].code, xorencrypt(userAll[i].nim, "braceyourcode"));
       }
       fwrite(status, sizeof(status), 1, userStatusFile);
       fwrite(userAll, sizeof(userAll), 1, userAllFile);
@@ -165,10 +167,10 @@ void main() {
       printf("\n");
       for(size_t i=0; i<48; i++){
         printf("%d --------\n",i+1);
-        printf("| Nim    : %s", userAll[i].nim);
+        printf("| Nim    : %s\n", userAll[i].nim);
         printf("| Key    : %d\n", userAll[i].key);
-        printf("| Pass   : %s", userCode[i].pass);
-        // printf("| Code   : %s\n", userCode[i].code);
+        printf("| Pass   : %s\n", userKey[i].pass);
+        printf("| Code   : %s\n", userCode[i].code);
         printf("| Status : ");
         if(status[i].isPassed == 1) printf("LULUS\n");
         else printf("TIDAK LULUS\n");
@@ -202,12 +204,14 @@ void main() {
           printf("-----------------\n");
           printf("| Masukkan NIM  : ");
           fgets(userAllOne.nim, 100, stdin);
+          strtok(userAllOne.nim, "\n");
           strcpy(statusOne.nim, userAllOne.nim);
           printf("| Masukkan KEY  : ");
           scanf("%d", &userAllOne.key); getchar();
           userKeyOne.key = userAllOne.key;
           printf("| Masukkan PASS : ");
           fgets(userCodeOne.pass, 100, stdin);
+          strtok(userCodeOne.pass, "\n");
 
           ASKLULUS:
             printf("| Lulus ? (1/0) : ");
@@ -217,7 +221,7 @@ void main() {
 
           printf("-----------------\n");
           strcpy(userKeyOne.pass, encrypt(userCodeOne.pass, userKeyOne.key));
-          userCodeOne.code = xorencrypt(userAllOne.nim, "braceyourcode");
+          strcpy(userCodeOne.code, xorencrypt(userAllOne.nim, "braceyourcode"));
         }
       }
       fseek(userAllFile, pos*sizeof(userAllOne), SEEK_SET);
